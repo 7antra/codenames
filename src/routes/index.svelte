@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from "svelte";
+	import { fly } from "svelte/transition";
 </script>
 
 <style lang="scss">
@@ -19,6 +19,7 @@
 	<meta property="og:image" content="https://www.sarter.com/og/test.jpg" />
 </svelte:head>
 
-<h1>Riiiiiick!</h1>
-
-<img alt="rick" src="free-rick.jpg" />
+<div out:fly={{ x: 1500 }} in:fly={{ x: -500, delay: 400 }}>
+	<h1>Riiiiiick!</h1>
+	<img alt="rick" src="free-rick.jpg" />
+</div>
