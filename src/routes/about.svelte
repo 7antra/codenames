@@ -15,20 +15,7 @@
 </script>
 
 <style lang="scss">
-	.flex {
-		display: flex;
-		flex-direction: row;
-		textarea {
-			width: 30%;
-			height: 50vh;
-		}
 
-		.marked {
-			width: 30%;
-			height: 50vh;
-			margin: 0 2%;
-		}
-	}
 </style>
 
 <svelte:head>

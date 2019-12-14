@@ -1,6 +1,8 @@
 // global.scss
 @import "var";
 
+@import "fonts";
+
 * {
 	margin: 0;
 	padding: 0;
@@ -14,7 +16,7 @@
 
 body {
 	margin: 0;
-	font-family: Roboto;
+	font-family: 'Sporting';
 	font-size: calc(1vw + 1.2vh);
 	line-height: 1.5;
 	color: #333;
