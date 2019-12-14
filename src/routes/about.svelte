@@ -4,10 +4,7 @@
 	import { fly } from "svelte/transition";
 	import marked from "marked";
 
-	let texte = `# H1 ? 
-## h2 ?
-<b>hoho</b>
-![](free-rick.jpg)`;
+	let texte = ``;
 	let markdown;
 
 	marked.setOptions({
@@ -41,13 +38,5 @@
 	<h1>About this site</h1>
 
 	<p>This is the 'about' page. There's not much here.</p>
-	<div class="flex">
-		<textarea name="" bind:value={texte} />
-		<div class="marked">
-			{@html markdown}
-			<p>
-				<img src="" alt="" />
-			</p>
-		</div>
-	</div>
+
 </div>

@@ -22,5 +22,4 @@
 <div out:fly={{ x: 1500 }} in:fly={{ x: -500, delay: 400 }}>
 	<h1>Riiiiiick!</h1>
 	<img alt="rick" src="free-rick.jpg" />
-
 </div>
