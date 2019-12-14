@@ -8,7 +8,7 @@ import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
 
 import sveltePreprocess from "svelte-preprocess";
-import image from "svelte-image";
+
 
 const preprocess = sveltePreprocess({
 	scss: {
@@ -19,11 +19,7 @@ const preprocess = sveltePreprocess({
 	},
 });
 
-svelte({
-	preprocess: {
-	  ...image(),
-	}
-  })
+
   
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
