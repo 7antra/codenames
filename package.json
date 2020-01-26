@@ -2,6 +2,7 @@
   "name": "todo",
   "description": "TODO width svelte and sapper",
   "version": "0.1.1",
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "sapper dev",
     "build": "sapper build --legacy",
