@@ -10,13 +10,13 @@
 </style>
 
 <svelte:head>
-	<title>Starter</title>
-	<meta name="description" content="Starter" />
+	<title>TODO</title>
+	<meta name="description" content="TODO" />
 	<!-- Facebook -->
-	<meta property="og:title" content="Starter" />
+	<meta property="og:title" content="TODO" />
 	<meta property="og:type" content="article" />
-	<meta property="og:url" content="https://www.sarter.com/" />
-	<meta property="og:image" content="https://www.sarter.com/og/test.jpg" />
+	<meta property="og:url" content="https://www.TODO.com/" />
+	<meta property="og:image" content="https://www.TODO.com/og/test.jpg" />
 </svelte:head>
 
 <div out:fly={{ x: 1500 }} in:fly={{ x: -500, delay: 400 }}>
