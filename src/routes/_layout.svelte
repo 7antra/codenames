@@ -1,10 +1,12 @@
 <script>
 	import { onMount } from "svelte";
 	import Nav from "../components/Nav.svelte";
-	export let mobile;
+	import { mobile } from "../store";
 	export let segment;
 
-	onMount(() => (mobile = window.matchMedia("(max-width: 700px)").matches));
+	onMount(() => {
+		mobile.set(window.matchMedia("(max-width: 700px)").matches);
+	});
 </script>
 
 <style lang="scss" global>
