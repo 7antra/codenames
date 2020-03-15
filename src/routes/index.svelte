@@ -1,5 +1,5 @@
 <script>
-	import { fly } from "svelte/transition";
+	import Canva from "../components/Canva.svelte";
 </script>
 
 <style lang="scss">
@@ -10,7 +10,7 @@
 </style>
 
 <svelte:head>
-	<title>TODO</title>
+	<title>Test</title>
 	<meta name="description" content="TODO" />
 	<!-- Facebook -->
 	<meta property="og:title" content="TODO" />
@@ -19,7 +19,5 @@
 	<meta property="og:image" content="https://www.TODO.com/og/test.jpg" />
 </svelte:head>
 
-<div out:fly={{ x: 1500 }} in:fly={{ x: -500, delay: 400 }}>
-	<h1>Riiiiiick!</h1>
-	<img alt="rick" src="free-rick.jpg" />
-</div>
+<Canva />
+<p>test</p>
