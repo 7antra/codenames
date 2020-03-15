@@ -1,14 +1,17 @@
 <script>
 	import { onMount } from "svelte";
-	import { humanity } from "../store";
+	import { draw } from "svelte/transition";
+	import { humanity, infected } from "../store";
 	let h = 0;
 	let w = 0;
 	let tick = 0;
+	let charts = [{ x1: 2, y1: 300, x2: 2, y2: 0 }];
+	let numPeople = 100;
 
 	onMount(() => {
 		let population = [];
 		// generate human
-		for (let i = 0; i < 100; i++) {
+		for (let i = 0; i < numPeople; i++) {
 			let newHuman = {
 				id: Math.random(),
 				cx: ~~(Math.random() * w),
@@ -32,8 +35,9 @@
 	});
 
 	setInterval(() => {
-		deplacement();
 		tick++;
+		deplacement();
+		drawChart(tick);
 	}, 25);
 
 	function deplacement() {
@@ -66,7 +70,6 @@
 					if (human.sick) {
 						other.sick = true;
 						other.ticked = other.ticked === 0 ? tick : other.ticked;
-						console.log("tick : ", tick);
 					}
 
 					if (other.sick) {
@@ -79,6 +82,19 @@
 			humanity.edit(other);
 			humanity.edit(human);
 		});
+	}
+
+	function drawChart(tick) {
+		const unite = h / numPeople;
+
+		let newLine = {
+			x1: tick,
+			y2: h - unite * $infected,
+			x2: tick,
+			y1: h,
+		};
+
+		charts = [...charts, newLine];
 	}
 </script>
 
@@ -102,6 +118,18 @@
 			.sick {
 				fill: red;
 			}
+
+			line {
+				stroke: rgba(187, 187, 187, 0.582);
+				stroke-width: 1px;
+			}
+		}
+
+		#info {
+			position: fixed;
+			top: 10%;
+			left: 10%;
+			color: white;
 		}
 	}
 </style>
@@ -109,10 +137,23 @@
 <svelte:window bind:innerWidth={w} bind:innerHeight={h} />
 
 <div id="canva">
-
 	<svg>
+		{#each charts as result}
+			<line
+				in:draw={{ duration: 500 }}
+				x1={result.x1}
+				x2={result.x2}
+				y1={result.y1}
+				y2={result.y2} />
+		{/each}
 		{#each $humanity as human}
 			<circle cx={human.cx} cy={human.cy} r="5" class:sick={human.sick} />
 		{/each}
+
 	</svg>
+
+	<div id="info">
+		<p>infecté(s): {$infected}</p>
+		<p>sain(s): {numPeople - $infected}</p>
+	</div>
 </div>

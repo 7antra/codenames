@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, derived } from "svelte/store";
 
 let mobile = writable(false);
 
@@ -26,4 +26,16 @@ let humanity = {
     }
 }
 
-export {mobile, humanity}
+let infected = derived(humanity,
+    $humanity => {
+        let total = 0;
+        $humanity.forEach(human=>{
+            if(human.sick) {
+                total++
+            }
+        })
+
+        return total;
+    })
+
+export {mobile, humanity, infected}
