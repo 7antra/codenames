@@ -18,8 +18,6 @@
 			$starter = data.game.start;
 		});
 
-		$numUsers++;
-
 		socket.on("load game", loadGame => {
 			console.log("loadGame : ", loadGame);
 			$starter = loadGame.start;
@@ -39,9 +37,6 @@
 
 		decouvrir = i => {
 			socket.emit("retourner", i.detail);
-			let carte = $codeName[i.detail];
-			carte.decouvert = true;
-			codeName.edit(carte, i.detail);
 		};
 	});
 </script>

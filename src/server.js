@@ -71,6 +71,7 @@ if(numUsers >= 0) {
 io(server).on('connection', function(socket) {
 	
 	socket.emit('user joined', { game, numUsers });
+	socket.broadcast.emit('user joined', { game, numUsers });
 
 	socket.on('user disconnect', function(name) {
 		socket.broadcast.emit('message', `Server: ${name} has left the chat.`)
@@ -96,11 +97,12 @@ io(server).on('connection', function(socket) {
 	//retourner une carte
 	socket.on('retourner', function(i) {
 		socket.broadcast.emit('deco', i);
+		socket.emit('deco', i);
 	})
 
 	socket.on('disconnect', function() {
 		numUsers--;
-		console.log(' user disconnect ')
+		socket.emit('user left', numUsers );
 		socket.broadcast.emit('user left', numUsers);
 	})
 
