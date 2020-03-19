@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import { dico } from "../helpers/dico";
 	import Carte from "../components/Carte.svelte";
+	import Footer from "../components/Footer.svelte";
 	import { codeName, numUsers, starter } from "../codeStore";
 	import io from "socket.io-client";
 	let socket;
@@ -71,14 +72,6 @@
 	}
 </style>
 
-<article>
-	<div id="box" class={$starter}>
-		{#each $codeName as arr, i (arr.mot)}
-			<Carte {i} on:retourner={decouvrir} />
-		{/each}
-	</div>
-</article>
-
 <svelte:window on:unload={socket.emit('disconnect')} />
 
 <svelte:head>
@@ -90,3 +83,13 @@
 	<meta property="og:url" content="https://www.TODO.com/" />
 	<meta property="og:image" content="https://www.TODO.com/og/test.jpg" />
 </svelte:head>
+
+<article>
+	<div id="box" class={$starter}>
+		{#each $codeName as arr, i (arr.mot)}
+			<Carte {i} on:retourner={decouvrir} />
+		{/each}
+	</div>
+</article>
+
+<Footer on:new={socket.emit('new game')} />

@@ -1,14 +1,10 @@
 <script>
 	import { numUsers, starter, spy } from "../codeStore";
-	import { onMount } from "svelte";
-	import io from "socket.io-client";
-	let socket;
+	import { createEventDispatcher } from "svelte";
+	const dispatch = createEventDispatcher();
 	let newGame;
 
-	onMount(() => {
-		socket = io();
-		newGame = () => socket.emit("new game");
-	});
+	newGame = () => dispatch("new");
 </script>
 
 <style lang="scss">

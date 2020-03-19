@@ -1,6 +1,5 @@
 <script>
 	import { onMount } from "svelte";
-	import Footer from "../components/Footer.svelte";
 	import { mobile } from "../store";
 	import { numUsers, starter, codeName } from "../codeStore";
 
@@ -16,5 +15,3 @@
 <main>
 	<slot />
 </main>
-
-<Footer />

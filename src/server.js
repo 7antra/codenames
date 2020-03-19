@@ -69,7 +69,7 @@ if(numUsers >= 0) {
 
 // SOCKET STUF
 io(server).on('connection', function(socket) {
-	
+	numUsers++;
 	socket.emit('user joined', { game, numUsers });
 	socket.broadcast.emit('user joined', { game, numUsers });
 
@@ -79,7 +79,6 @@ io(server).on('connection', function(socket) {
 	
 	socket.on('user connect', () => {
 		let message = `Server: un nouveau confiné s'est connecté`;
-		numUsers++;
 		console.log(' : new user' )
 		socket.broadcast.emit('user joined', { game, numUsers });
 	})
