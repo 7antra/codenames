@@ -91,6 +91,7 @@ io(server).on('connection', function(socket) {
 	socket.on('new game', () => {
 		newGame();
 		socket.broadcast.emit('load game', game);
+		socket.emit('load game', game);
 	})
 	
 	//retourner une carte
