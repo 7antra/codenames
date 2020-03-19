@@ -1,14 +1,13 @@
-import resolve from 'rollup-plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import commonjs from 'rollup-plugin-commonjs';
+import commonjs from '@rollup/plugin-commonjs';
+import json from "@rollup/plugin-json";
 import svelte from 'rollup-plugin-svelte';
 import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import config from 'sapper/config/rollup.js';
-import pkg from './package.json';
-
+import pkg from './package.json'
 import sveltePreprocess from "svelte-preprocess";
-
 
 const preprocess = sveltePreprocess({
 	scss: {
@@ -19,14 +18,11 @@ const preprocess = sveltePreprocess({
 	},
 });
 
-
-  
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
 const legacy = !!process.env.SAPPER_LEGACY_BUILD;
 
 const onwarn = (warning, onwarn) => (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning);
-const dedupe = importee => importee === 'svelte' || importee.startsWith('svelte/');
 
 export default {
 	client: {
@@ -43,9 +39,12 @@ export default {
 				emitCss: true,
 				preprocess
 			}),
+			json(),
 			resolve({
 				browser: true,
-				dedupe
+				main: true,
+				module: true,
+				dedupe: ['svelte']
 			}),
 			commonjs(),
 
@@ -82,13 +81,18 @@ export default {
 				'process.browser': false,
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
+			json(),
 			svelte({
 				generate: 'ssr',
 				dev,
 				preprocess
 			}),
+			
 			resolve({
-				dedupe
+				browser: true,
+				main: true,
+				module: true,
+				dedupe: ['svelte']
 			}),
 			commonjs()
 		],

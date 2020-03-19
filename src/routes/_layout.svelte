@@ -1,7 +1,8 @@
 <script>
 	import { onMount } from "svelte";
-	import Nav from "../components/Nav.svelte";
+	import Footer from "../components/Footer.svelte";
 	import { mobile } from "../store";
+	import { numUsers, starter, codeName } from "../codeStore";
 
 	onMount(() => {
 		mobile.set(window.matchMedia("(max-width: 700px)").matches);
@@ -15,3 +16,5 @@
 <main>
 	<slot />
 </main>
+
+<Footer />

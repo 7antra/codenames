@@ -1,54 +1,102 @@
-import http from "http";
-import express from 'express';
+import sirv from 'sirv';
+import polka from 'polka';
 import compression from 'compression';
-import bodyParser from 'body-parser'
-import cookieParser from 'cookie-parser'
-import cors from 'cors';
 import * as sapper from '@sapper/server';
+import http from 'http';
+import io from 'socket.io';
+import { dico } from "./helpers/dico";
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
-const app = express()
+const server = http.createServer();
 
-app.disable('x-powered-by')
+polka({ server }) // You can also use Express
+	.use(
+		compression({ threshold: 0 }),
+		sirv('static', { dev }),
+		sapper.middleware()
+	)
+	.listen(PORT, err => {
+		if (err) console.log('error', err);
+	});
 
-app.use(
-	bodyParser.urlencoded({
-		extended: true
-	}),
-	bodyParser.json(),
-	cookieParser()
-)
+// GAME STUF
+let numUsers = 0;
+let game = [];
 
-if (NODE_ENV === 'production') {
-	app.use(compression())
-	app.use(cors())
-	app.set('trust proxy', 1) // trust first proxy
+const newGame = () => {
+	//prettier-ignore
+	let colors = ['red','red','red','red','red','red','red','red','blue','blue','blue','blue','blue','blue','blue','blue','white','white','white','white','white','white','white','black']
+
+	let arr = [];
+	let mots = [];
+	let commence;
+	let newgame = [];
+
+	if (Math.random() > 0.5) {
+		colors.push("red");
+		commence = "red";
+	} else {
+		colors.push("blue");
+		commence = "blue";
+	}
+
+	arr = colors.sort((a, b) => 0.5 - Math.random());
+	mots = dico.sort((a, b) => 0.5 - Math.random());
+
+	for (let i = 0; i < colors.length; i++) {
+		newgame.push({
+			mot: mots[i],
+			color: colors[i],
+			decouvert: false,
+		});
+	}
+
+	game = {
+		plateau : newgame,
+		start: commence 
+	}
+
 }
 
-app.use(function(req, res, next) {
-	res.header('Access-Control-Allow-Origin', '*')
-	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE')
-	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
-	next()
-})
 
-  // static folder
-app.use(express.static('static'))
+if(numUsers === 0) {
+	newGame();
+	console.log('game : ', game)
+}
 
-
-app.use(
-	sapper.middleware({
-	  //inject store ?
+// SOCKET STUF
+io(server).on('connection', function(socket) {
+	socket.emit('user joined', { game, numUsers });
+	
+	socket.on('user connect', () => {
+		let message = `Server: un nouveau confiné s'est connecté`;
+		++numUsers;
+		socket.broadcast.emit('user joined', { game, numUsers });
 	})
-  )
 
+	socket.on('message', function(msg) {
+		socket.broadcast.emit('message', msg);
+	})
 
-  let server = http.createServer(app)
+	//new game
+	socket.on('new game', () => {
+		newGame();
+		socket.broadcast.emit('load game', game);
+	})
+	
+	//retourner une carte
+	socket.on('decouvrir', function(i) {
+		socket.broadcast.emit('decouvrir', i);
+	})
 
-server.listen(PORT, err => {
-  if (err) {
-    console.error('Http server error', err)
-  }
-})
+	socket.on('disconnect', function() {
+		--numUsers;
+		socket.broadcast.emit('user left', numUsers);
+	})
+
+	socket.on('user disconnect', function(name) {
+		socket.broadcast.emit('message', `Server: ${name} has left the chat.`)
+	})
+});
