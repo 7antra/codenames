@@ -45,7 +45,7 @@
 </style>
 
 <footer class={$starter}>
-	<p>Nombre de connexion : {$numUsers}</p>
+	<p>Nombre de confiné(s) : {$numUsers}</p>
 	<button on:click={newGame}>NEW GAME 🎬</button>
 	{#if $spy}
 		<button on:click={() => ($spy = false)}>BOARD 📝</button>

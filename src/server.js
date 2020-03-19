@@ -61,18 +61,25 @@ const newGame = () => {
 }
 
 
-if(numUsers === 0) {
+if(numUsers >= 0) {
+	numUsers = 0;
 	newGame();
 	console.log('game : ', game)
 }
 
 // SOCKET STUF
 io(server).on('connection', function(socket) {
+	
 	socket.emit('user joined', { game, numUsers });
+
+	socket.on('user disconnect', function(name) {
+		socket.broadcast.emit('message', `Server: ${name} has left the chat.`)
+	})
 	
 	socket.on('user connect', () => {
 		let message = `Server: un nouveau confiné s'est connecté`;
-		++numUsers;
+		numUsers++;
+		console.log(' : new user' )
 		socket.broadcast.emit('user joined', { game, numUsers });
 	})
 
@@ -87,16 +94,15 @@ io(server).on('connection', function(socket) {
 	})
 	
 	//retourner une carte
-	socket.on('decouvrir', function(i) {
-		socket.broadcast.emit('decouvrir', i);
+	socket.on('retourner', function(i) {
+		socket.broadcast.emit('deco', i);
 	})
 
 	socket.on('disconnect', function() {
-		--numUsers;
+		numUsers--;
+		console.log(' user disconnect ')
 		socket.broadcast.emit('user left', numUsers);
 	})
 
-	socket.on('user disconnect', function(name) {
-		socket.broadcast.emit('message', `Server: ${name} has left the chat.`)
-	})
+	
 });

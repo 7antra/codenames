@@ -15,7 +15,7 @@ let codeName = {
     },
 }
 
-let numUsers = writable(0);
+let numUsers = writable(1);
 let starter = writable('white');
 let spy = writable(false);
 

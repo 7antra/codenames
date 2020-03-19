@@ -1,14 +1,10 @@
 <script>
-	import { onMount } from "svelte";
+	import { onMount, createEventDispatcher } from "svelte";
 	import { fly } from "svelte/transition";
 	import { codeName, spy } from "../codeStore";
-
-	import io from "socket.io-client";
-	const socket = io();
+	const dispatch = createEventDispatcher();
 
 	export let i;
-
-	const decouvrir = () => socket.emit("decouvrir", i);
 </script>
 
 <style lang="scss">
@@ -67,6 +63,6 @@
 <div
 	in:fly={{ x: -200, delay: 100 * i }}
 	class={$codeName[i].decouvert || $spy ? $codeName[i].color : ''}
-	on:click={decouvrir}>
+	on:click={() => dispatch('retourner', i)}>
 	<p>{$codeName[i].mot}</p>
 </div>

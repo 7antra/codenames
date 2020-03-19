@@ -5,6 +5,7 @@
 	import { codeName, numUsers, starter } from "../codeStore";
 	import io from "socket.io-client";
 	let socket;
+	let decouvrir;
 
 	onMount(() => {
 		socket = io();
@@ -17,13 +18,16 @@
 			$starter = data.game.start;
 		});
 
+		$numUsers++;
+
 		socket.on("load game", loadGame => {
 			console.log("loadGame : ", loadGame);
 			$starter = loadGame.start;
 			codeName.setStore(loadGame.plateau);
 		});
 
-		socket.on("decouvrir", i => {
+		socket.on("deco", i => {
+			console.log("i dec: ", i);
 			let carte = $codeName[i];
 			carte.decouvert = true;
 			codeName.edit(carte, i);
@@ -32,6 +36,13 @@
 		socket.on("user left", data => {
 			$numUsers = data;
 		});
+
+		decouvrir = i => {
+			socket.emit("retourner", i.detail);
+			let carte = $codeName[i.detail];
+			carte.decouvert = true;
+			codeName.edit(carte, i.detail);
+		};
 	});
 </script>
 
@@ -68,7 +79,7 @@
 <article>
 	<div id="box" class={$starter}>
 		{#each $codeName as arr, i (arr.mot)}
-			<Carte {i} />
+			<Carte {i} on:retourner={decouvrir} />
 		{/each}
 	</div>
 </article>
