@@ -1,16 +1,27 @@
+<script context="module">
+	export async function preload({ params }) {
+		const slug = params.id;
+
+		const resp = await this.fetch(`/api/` + slug);
+		const data = await resp.json();
+		if (resp.status === 500) {
+			this.redirect("/");
+		}
+	}
+</script>
+
 <script>
 	import { onMount } from "svelte";
 	import { goto } from "@sapper/app";
-	import { dico } from "../helpers/dico";
-	import Carte from "../components/Carte.svelte";
-	import Footer from "../components/Footer.svelte";
-	import { codeName, numUsers, starter, id } from "../codeStore";
+	import Carte from "../../components/Carte.svelte";
+	import Footer from "../../components/Footer.svelte";
+	import { codeName, numUsers, starter, id } from "../../codeStore";
 	import io from "socket.io-client";
 	let socket;
 	let decouvrir;
 
 	onMount(() => {
-		socket = io("/" + $id);
+		socket = io();
 
 		socket.emit("user connect");
 

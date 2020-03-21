@@ -1,5 +1,5 @@
 <script>
-	import { numUsers, starter, spy } from "../codeStore";
+	import { numUsers, starter, spy, id } from "../codeStore";
 	import { createEventDispatcher } from "svelte";
 	const dispatch = createEventDispatcher();
 	let newGame;
@@ -41,6 +41,7 @@
 </style>
 
 <footer class={$starter}>
+	<p>ID: {$id}</p>
 	<p>Nombre de confiné(s) : {$numUsers}</p>
 	<button on:click={newGame}>NEW GAME 🎬</button>
 	{#if $spy}

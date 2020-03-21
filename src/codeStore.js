@@ -18,5 +18,6 @@ let codeName = {
 let numUsers = writable(1);
 let starter = writable('white');
 let spy = writable(false);
+let id = writable('');
 
-export {codeName, numUsers, starter, spy}
+export {codeName, numUsers, starter, spy, id}

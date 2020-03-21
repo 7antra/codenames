@@ -4,12 +4,19 @@ import compression from 'compression';
 import * as sapper from '@sapper/server';
 import http from 'http';
 import io from 'socket.io';
-import { dico } from "./helpers/dico";
+
+//helpers
+import {newGame} from "./helpers/newGame";
+
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';
 
 const server = http.createServer();
+
+const redis = require('redis');
+const redisClient = redis.createClient();
+
 
 polka({ server }) // You can also use Express
 	.use(
@@ -25,61 +32,30 @@ polka({ server }) // You can also use Express
 let numUsers = 0;
 let game = [];
 
-const newGame = () => {
-	//prettier-ignore
-	let colors = ['red','red','red','red','red','red','red','red','blue','blue','blue','blue','blue','blue','blue','blue','white','white','white','white','white','white','white','black']
-
-	let arr = [];
-	let mots = [];
-	let commence;
-	let newgame = [];
-
-	if (Math.random() > 0.5) {
-		colors.push("red");
-		commence = "red";
-	} else {
-		colors.push("blue");
-		commence = "blue";
-	}
-
-	arr = colors.sort((a, b) => 0.5 - Math.random());
-	mots = dico.sort((a, b) => 0.5 - Math.random());
-
-	for (let i = 0; i < colors.length; i++) {
-		newgame.push({
-			mot: mots[i],
-			color: colors[i],
-			decouvert: false,
-		});
-	}
-
-	game = {
-		plateau : newgame,
-		start: commence 
-	}
-
-}
-
 
 if(numUsers >= 0) {
 	numUsers = 0;
-	newGame();
+	game = newGame();
 	console.log('game : ', game)
 }
+
+// REDIS
+redisClient.on('connect', () => {
+	console.log(' Redis connected ');
+})
+
+redisClient.on('error', err => {
+    console.log('Something went wrong ' + err);
+})
 
 // SOCKET STUF
 io(server).on('connection', function(socket) {
 	numUsers++;
 	socket.emit('user joined', { game, numUsers });
 	socket.broadcast.emit('user joined', { game, numUsers });
-
-	socket.on('user disconnect', function(name) {
-		socket.broadcast.emit('message', `Server: ${name} has left the chat.`)
-	})
 	
 	socket.on('user connect', () => {
 		let message = `Server: un nouveau confiné s'est connecté`;
-		console.log(' : new user' )
 		socket.broadcast.emit('user joined', { game, numUsers });
 	})
 
@@ -89,13 +65,24 @@ io(server).on('connection', function(socket) {
 
 	//new game
 	socket.on('new game', () => {
-		newGame();
-		socket.broadcast.emit('load game', game);
-		socket.emit('load game', game);
+		//create ID : 
+		let id = 'pantoufle';
+		socket.join(id);
+		game = newGame();
+		redisClient.set(id, JSON.stringify({id,game}))
+		//socket.broadcast.emit('load game', game);
+		socket.emit('new id', id);
 	})
 	
 	//retourner une carte
-	socket.on('retourner', function(i) {
+	socket.on('retourner', data => {
+		let edited = game;
+		let id = data.id
+		let i = data.i
+
+		edited.plateau[i].decouvert = true;
+		redisClient.set(id, JSON.stringify({id,edited}))
+
 		socket.broadcast.emit('deco', i);
 		socket.emit('deco', i);
 	})

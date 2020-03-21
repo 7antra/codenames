@@ -18,6 +18,7 @@
 		align-items: center;
 		border: 1px solid black;
 		transition: all 1s;
+		cursor: pointer;
 
 		p {
 			text-transform: uppercase;
