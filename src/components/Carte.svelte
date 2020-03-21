@@ -33,6 +33,9 @@
 		p {
 			color: transparent;
 		}
+		.spy {
+			color: white;
+		}
 	}
 	.blue {
 		border: 1px solid $blue;
@@ -40,6 +43,9 @@
 
 		p {
 			color: transparent;
+		}
+		.spy {
+			color: white;
 		}
 	}
 	.black {
@@ -49,6 +55,9 @@
 		p {
 			color: transparent;
 		}
+		.spy {
+			color: white;
+		}
 	}
 	.white {
 		border: 1px solid grey;
@@ -57,6 +66,9 @@
 		p {
 			color: transparent;
 		}
+		.spy {
+			color: black;
+		}
 	}
 </style>
 
@@ -64,5 +76,5 @@
 	in:fly={{ x: -200, delay: 100 * i }}
 	class={$codeName[i].decouvert || $spy ? $codeName[i].color : ''}
 	on:click={() => dispatch('retourner', i)}>
-	<p>{$codeName[i].mot}</p>
+	<p class={$spy ? 'spy' : ''}>{$codeName[i].mot}</p>
 </div>
