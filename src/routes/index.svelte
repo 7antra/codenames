@@ -32,6 +32,10 @@
 			codeName.edit(carte, i);
 		});
 
+		socket.on("alignement", game => {
+			codeName.setStore(game.plateau);
+		});
+
 		socket.on("user left", data => {
 			$numUsers = data;
 		});
@@ -47,7 +51,7 @@
 
 	article {
 		width: 100%;
-		height: 95vh;
+		height: 92.5vh;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -92,4 +96,4 @@
 	</div>
 </article>
 
-<Footer on:new={socket.emit('new game')} />
+<Footer on:new={socket.emit('new game')} on:aligner={socket.emit('aligner')} />

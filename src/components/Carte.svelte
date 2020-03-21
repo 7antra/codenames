@@ -17,6 +17,7 @@
 		justify-content: center;
 		align-items: center;
 		border: 1px solid black;
+		transition: transform 1s ease-out attr("data-delay" number);
 		transition: all 1s;
 
 		p {
@@ -74,7 +75,9 @@
 
 <div
 	in:fly={{ x: -200, delay: 100 * i }}
+	data-delay={100 * i}
 	class={$codeName[i].decouvert || $spy ? $codeName[i].color : ''}
-	on:click={() => dispatch('retourner', i)}>
+	on:click={() => dispatch('retourner', i)}
+	style="transform: rotate({$codeName[i].rotate}deg)">
 	<p class={$spy ? 'spy' : ''}>{$codeName[i].mot}</p>
 </div>

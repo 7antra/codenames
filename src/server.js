@@ -46,10 +46,13 @@ const newGame = () => {
 	mots = dico.sort((a, b) => 0.5 - Math.random());
 
 	for (let i = 0; i < colors.length; i++) {
+		let r = Math.random() * 5 - 2;
+
 		newgame.push({
 			mot: mots[i],
 			color: colors[i],
 			decouvert: false,
+			rotate: r
 		});
 	}
 
@@ -64,7 +67,6 @@ const newGame = () => {
 if(numUsers >= 0) {
 	numUsers = 0;
 	newGame();
-	console.log('game : ', game)
 }
 
 // SOCKET STUF
@@ -105,6 +107,14 @@ io(server).on('connection', function(socket) {
 		numUsers--;
 		socket.emit('user left', numUsers );
 		socket.broadcast.emit('user left', numUsers);
+	})
+
+	socket.on('aligner', () => {
+		game.plateau.forEach(carte => {
+			carte.rotate = 0;
+		})
+		socket.broadcast.emit('alignement', game)
+		socket.emit('alignement', game)
 	})
 
 	
