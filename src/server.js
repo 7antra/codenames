@@ -96,6 +96,7 @@ io(server).on('connection', function(socket) {
 	
 	//retourner une carte
 	socket.on('retourner', function(i) {
+		game.plateau[i].decouvert = true;
 		socket.broadcast.emit('deco', i);
 		socket.emit('deco', i);
 	})
