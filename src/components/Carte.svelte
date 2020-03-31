@@ -71,6 +71,10 @@
 			color: black;
 		}
 	}
+
+	.useless {
+		opacity: 0.05;
+	}
 </style>
 
 <div
@@ -79,5 +83,7 @@
 	class={$codeName[i].decouvert || $spy ? $codeName[i].color : ''}
 	on:click={() => dispatch('retourner', i)}
 	style="transform: rotate({$codeName[i].rotate}deg)">
-	<p class={$spy ? 'spy' : ''}>{$codeName[i].mot}</p>
+	<p class={$spy ? 'spy' : ''} class:useless={$codeName[i].decouvert && $spy}>
+		{$codeName[i].mot}
+	</p>
 </div>
