@@ -117,5 +117,11 @@ io(server).on('connection', function(socket) {
 		socket.emit('alignement', game)
 	})
 
+	socket.on('rotate', data => {
+		game.plateau[data.i].rotate = Math.floor(game.plateau[data.i].rotate + data.n);
+		socket.broadcast.emit('rotate', data)
+		socket.emit('rotate', data)
+	})
+
 	
 });

@@ -19,4 +19,25 @@ let numUsers = writable(1);
 let starter = writable('white');
 let spy = writable(false);
 
-export {codeName, numUsers, starter, spy}
+const count = derived(
+    codeName,
+    $codeName => {
+        let blue = 0;
+
+        let extractBlue = $codeName.filter(el => {
+            if(el.color === 'blue' && el.decouvert) {
+                return el;
+            }
+        })
+
+        let extractRed = $codeName.filter(el => {
+            if(el.color === 'red' && el.decouvert) {
+                return el;
+            }
+        })
+
+        return {red: extractRed.length, blue: extractBlue.length}
+    }
+)
+
+export {codeName, numUsers, starter, spy, count}

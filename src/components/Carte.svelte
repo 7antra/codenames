@@ -3,8 +3,33 @@
 	import { fly } from "svelte/transition";
 	import { codeName, spy } from "../codeStore";
 	const dispatch = createEventDispatcher();
+	import { tweened } from "svelte/motion";
+	import { cubicOut } from "svelte/easing";
 
 	export let i;
+
+	let timer;
+	let touched = false;
+
+	const progress = tweened(0, {
+		duration: 1100,
+		easing: cubicOut,
+	});
+
+	function touch(e) {
+		touched = true;
+		progress.set(1);
+		timer = setTimeout(() => {
+			touched = false;
+			dispatch("retourner", i);
+		}, 1000);
+	}
+
+	function rotate(n) {
+		dispatch("rotate", { i, n });
+	}
+
+	$: console.log("timer : ", timer);
 </script>
 
 <style lang="scss">
@@ -14,16 +39,38 @@
 		width: 100%;
 		height: 100%;
 		display: flex;
-		justify-content: center;
+		justify-content: space-between;
 		align-items: center;
 		border: 1px solid black;
-		transition: transform 1s ease-out attr("data-delay" number);
 		transition: all 1s;
+		background-color: white;
 
 		p {
 			text-transform: uppercase;
 			letter-spacing: 0.3rem;
 			font-size: 1rem;
+		}
+		.fleche {
+			margin-left: 2px;
+			transition: all 0.4s;
+			user-select: none;
+			opacity: 0;
+
+			&:focus {
+				opacity: 1;
+			}
+		}
+
+		&:hover {
+			cursor: pointer;
+
+			.fleche {
+				opacity: 0.3;
+			}
+		}
+
+		&.touched {
+			transition: all 0s;
 		}
 	}
 
@@ -31,9 +78,6 @@
 		border: 1px solid $red;
 		background-color: $red;
 
-		p {
-			color: transparent;
-		}
 		.spy {
 			color: white;
 		}
@@ -42,9 +86,6 @@
 		border: 1px solid $blue;
 		background-color: $blue;
 
-		p {
-			color: transparent;
-		}
 		.spy {
 			color: white;
 		}
@@ -53,9 +94,6 @@
 		border: 1px solid black;
 		background-color: rgb(53, 53, 53);
 
-		p {
-			color: transparent;
-		}
 		.spy {
 			color: white;
 		}
@@ -64,26 +102,40 @@
 		border: 1px solid grey;
 		background-color: rgba(168, 168, 168, 0.212);
 
-		p {
-			color: transparent;
-		}
 		.spy {
 			color: black;
 		}
 	}
 
-	.useless {
-		opacity: 0.05;
+	.red,
+	.blue,
+	.white,
+	.black {
+		p {
+			color: transparent;
+			transition: all 0.3s;
+			&.useless {
+				opacity: 0.1;
+			}
+		}
 	}
 </style>
 
 <div
 	in:fly={{ x: -200, delay: 100 * i }}
-	data-delay={100 * i}
+	class:touched
 	class={$codeName[i].decouvert || $spy ? $codeName[i].color : ''}
-	on:click={() => dispatch('retourner', i)}
-	style="transform: rotate({$codeName[i].rotate}deg)">
+	on:mousedown={touch}
+	on:mouseup={() => {
+		clearTimeout(timer);
+		progress.set(0);
+		touched = false;
+	}}
+	style="transform: rotate({$codeName[i].rotate}deg);">
+	<p class="fleche" on:click={() => rotate(-1)}>↶</p>
 	<p class={$spy ? 'spy' : ''} class:useless={$codeName[i].decouvert && $spy}>
 		{$codeName[i].mot}
 	</p>
+	<p class="fleche" on:click={() => rotate(1)}>↷</p>
+
 </div>

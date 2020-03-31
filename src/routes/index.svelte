@@ -7,6 +7,7 @@
 	import io from "socket.io-client";
 	let socket;
 	let decouvrir;
+	let rotate;
 
 	onMount(() => {
 		socket = io();
@@ -26,7 +27,6 @@
 		});
 
 		socket.on("deco", i => {
-			console.log("i dec: ", i);
 			let carte = $codeName[i];
 			carte.decouvert = true;
 			codeName.edit(carte, i);
@@ -40,8 +40,19 @@
 			$numUsers = data;
 		});
 
+		socket.on("rotate", data => {
+			console.log("data : ", data);
+			let carte = $codeName[data.i];
+			carte.rotate = Math.floor(carte.rotate + data.n);
+			codeName.edit(carte, data.i);
+		});
+
 		decouvrir = i => {
 			socket.emit("retourner", i.detail);
+		};
+
+		rotate = i => {
+			socket.emit("rotate", i.detail);
 		};
 	});
 </script>
@@ -91,7 +102,7 @@
 <article>
 	<div id="box" class={$starter}>
 		{#each $codeName as arr, i (arr.mot)}
-			<Carte {i} on:retourner={decouvrir} />
+			<Carte {i} on:retourner={decouvrir} on:rotate={rotate} />
 		{/each}
 	</div>
 </article>

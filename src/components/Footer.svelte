@@ -1,5 +1,5 @@
 <script>
-	import { numUsers, starter, spy } from "../codeStore";
+	import { numUsers, starter, spy, count } from "../codeStore";
 	import { createEventDispatcher } from "svelte";
 	const dispatch = createEventDispatcher();
 
@@ -46,7 +46,8 @@
 <footer class={$starter}>
 
 	<p>Nombre de confiné(s) : {$numUsers}</p>
-
+	<p>Bleu : {$count.blue}/{$starter === 'blue' ? 9 : 8}</p>
+	<p>Rouge : {$count.red}/{$starter === 'red' ? 9 : 8}</p>
 	<div>
 
 		{#if $spy}
@@ -54,7 +55,7 @@
 		{:else}
 			<button on:click={() => ($spy = true)}>SPY 🕵️</button>
 		{/if}
-		<button on:click={please}>ALIGNER 👌</button>
-		<button on:click={newGame}>NEW GAME 🎬</button>
+		<!-- <button on:click={please}>👌</button> -->
+		<button on:click={newGame}>NEW GAME 🎲</button>
 	</div>
 </footer>
