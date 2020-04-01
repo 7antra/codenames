@@ -40,4 +40,6 @@ const count = derived(
     }
 )
 
-export {codeName, numUsers, starter, spy, count}
+let loading = writable(false);
+
+export {codeName, numUsers, starter, spy, count, loading}

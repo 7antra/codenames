@@ -1,7 +1,7 @@
 <script>
 	import { onMount, createEventDispatcher } from "svelte";
 	import { fly } from "svelte/transition";
-	import { codeName, spy } from "../codeStore";
+	import { codeName, spy, loading } from "../codeStore";
 	const dispatch = createEventDispatcher();
 	import { tweened } from "svelte/motion";
 	import { cubicOut } from "svelte/easing";
@@ -19,9 +19,11 @@
 	function touch(e) {
 		touched = true;
 		progress.set(1);
+		$loading = true;
 		timer = setTimeout(() => {
 			touched = false;
 			dispatch("retourner", i);
+			$loading = false;
 		}, 1000);
 	}
 
@@ -130,6 +132,7 @@
 		clearTimeout(timer);
 		progress.set(0);
 		touched = false;
+		$loading = false;
 	}}
 	style="transform: rotate({$codeName[i].rotate}deg);">
 	<p class="fleche" on:click={() => rotate(-1)}>↶</p>
