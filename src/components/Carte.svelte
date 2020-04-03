@@ -50,7 +50,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		border: 1px solid black;
+		border: 3px solid black;
 		transition: all 1s;
 		background-color: white;
 
@@ -58,6 +58,7 @@
 			text-transform: uppercase;
 			letter-spacing: 0.3rem;
 			font-size: 1rem;
+			font-weight: bold;
 		}
 		.fleche {
 			margin-left: 2px;
@@ -84,7 +85,7 @@
 	}
 
 	.red {
-		border: 1px solid $red;
+		border: 3px solid $red;
 		background-color: $red;
 
 		.spy {
@@ -92,7 +93,7 @@
 		}
 	}
 	.blue {
-		border: 1px solid $blue;
+		border: 3px solid $blue;
 		background-color: $blue;
 
 		.spy {
@@ -100,7 +101,7 @@
 		}
 	}
 	.black {
-		border: 1px solid black;
+		border: 3px solid black;
 		background-color: rgb(53, 53, 53);
 
 		.spy {
@@ -108,8 +109,8 @@
 		}
 	}
 	.white {
-		border: 1px solid grey;
-		background-color: rgba(168, 168, 168, 0.212);
+		border: 3px solid grey;
+		background-color: rgba(168, 168, 168, 0.582);
 
 		.spy {
 			color: black;
