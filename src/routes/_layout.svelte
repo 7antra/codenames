@@ -5,19 +5,19 @@
 	import Circle from "../components/ui/circleTouch.svelte";
 
 	onMount(() => {
-		mobile.set(window.matchMedia("(max-width: 700px)").matches);
+		mobile.set(window.matchMedia("(max-width: 1000px)").matches);
 	});
 
 	let spot = {
-		x: 0,
-		y: 0,
+		x: 100,
+		y: 100,
 	};
 
 	const move = e => {
-		console.log("e : ", e);
-
-		spot.x = e.clientX;
-		spot.y = e.clientY;
+		if (!$mobile) {
+			spot.x = e.clientX;
+			spot.y = e.clientY;
+		}
 	};
 </script>
 
@@ -26,12 +26,14 @@
 
 	#mouse {
 		position: fixed;
+		top: calc(50% - 50px);
+		left: calc(50% - 50px);
 		z-index: 10000;
 		pointer-events: none;
 	}
 </style>
 
-<div id="mouse" style="top: {spot.y - 10}px; left: {spot.x - 10}px;">
+<div id="mouse" style="top: {spot.y - 50}px; left: {spot.x - 50}px;">
 	<Circle />
 </div>
 

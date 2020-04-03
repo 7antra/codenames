@@ -31,6 +31,13 @@
 		dispatch("rotate", { i, n });
 	}
 
+	function unTouch(e) {
+		clearTimeout(timer);
+		progress.set(0);
+		touched = false;
+		$loading = false;
+	}
+
 	$: console.log("timer : ", timer);
 </script>
 
@@ -128,12 +135,9 @@
 	class:touched
 	class={$codeName[i].decouvert || $spy ? $codeName[i].color : ''}
 	on:mousedown={touch}
-	on:mouseup={() => {
-		clearTimeout(timer);
-		progress.set(0);
-		touched = false;
-		$loading = false;
-	}}
+	on:touchstart={touch}
+	on:touchend={unTouch}
+	on:mouseup={unTouch}
 	style="transform: rotate({$codeName[i].rotate}deg);">
 	<p class="fleche" on:click={() => rotate(-1)}>↶</p>
 	<p class={$spy ? 'spy' : ''} class:useless={$codeName[i].decouvert && $spy}>

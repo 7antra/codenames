@@ -3,11 +3,15 @@
 	import { draw } from "svelte/transition";
 </script>
 
-<style>
+<style lang="scss">
 	svg {
-		width: 20px;
-		height: 20px;
+		width: 100px;
+		height: 100px;
 		pointer-events: none;
+
+		path {
+			fill: transparent;
+		}
 	}
 </style>
 
@@ -25,7 +29,7 @@
 			in:draw={{ duration: 1000 }}
 			d="M10,3C13.863,3 17,6.137 17,10C17,13.863 13.863,17 10,17C6.137,17
 			3,13.863 3,10C3,6.137 6.137,3 10,3"
-			style="fill:rgb(239,239,239);stroke:black;stroke-width:2.59px;" />
+			style="stroke:black;stroke-width:2.59px;" />
 	{/if}
 
 </svg>
