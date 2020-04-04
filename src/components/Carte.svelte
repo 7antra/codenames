@@ -56,9 +56,10 @@
 
 		p {
 			text-transform: uppercase;
-			letter-spacing: 0.3rem;
-			font-size: 1rem;
+			letter-spacing: 0.2rem;
+			font-size: 0.85rem;
 			font-weight: bold;
+			white-space: nowrap;
 		}
 		.fleche {
 			margin-left: 2px;
