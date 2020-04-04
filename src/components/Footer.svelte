@@ -12,10 +12,11 @@
 
 	footer {
 		position: fixed;
-		display: flex;
-		justify-content: space-between;
+
+		display: grid;
 		align-items: center;
-		flex-direction: row;
+		grid-template-columns: repeat(5, 1fr);
+		grid-gap: 12px;
 		height: 7.5vh;
 		width: 100%;
 		bottom: 0;
@@ -30,7 +31,6 @@
 			color: white;
 			border: 2px solid white;
 			border-radius: 3px;
-			margin-left: 5vw;
 		}
 	}
 
@@ -45,7 +45,7 @@
 
 <footer class={$starter}>
 
-	<p>Nombre de confiné(s) : {$numUsers}</p>
+	<p>Nb de confiné{$numUsers > 1 ? 's' : ''} : {$numUsers}</p>
 	<p>Bleu : {$count.blue}/{$starter === 'blue' ? 9 : 8}</p>
 	<p>Rouge : {$count.red}/{$starter === 'red' ? 9 : 8}</p>
 	<div>
@@ -56,6 +56,6 @@
 			<button on:click={() => ($spy = true)}>SPY 🕵️</button>
 		{/if}
 		<!-- <button on:click={please}>👌</button> -->
-		<button on:click={newGame}>NEW GAME 🎲</button>
 	</div>
+	<button on:click={newGame}>NEW GAME 🎲</button>
 </footer>
