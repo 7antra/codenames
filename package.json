@@ -22,7 +22,7 @@
     "node-sass": "^4.13.0",
     "polka": "^0.5.2",
     "sirv": "^0.4.0",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.4.0",
     "svelte-preprocess": "^3.2.6"
   },
   "devDependencies": {
